@@ -6,8 +6,9 @@ public class PlayerGravity : MonoBehaviour
     [Header("Gravity Settings")]
     [SerializeField] private float cooldownTime = 2f;
     [SerializeField] private Transform ceilingCheck;
-    [SerializeField] private Vector2 boxSize = new Vector2(0.8f, 0.2f); // Chiều ngang, chiều dọc của hộp kiểm tra
+    [SerializeField] private Vector2 boxSize = new Vector2(0.8f, 0.2f);
     [SerializeField] private LayerMask GroundLayer;
+    [SerializeField] private int manaCost = 15;
 
     [SerializeField]private Rigidbody2D rb;
     private bool isGravityInverted = false;
@@ -38,7 +39,6 @@ public class PlayerGravity : MonoBehaviour
 
         if (isCeilingBlocked)
         {
-            Debug.Log("Không đủ khoảng trống! Vai hoặc đầu sẽ bị kẹt!");
             return;
         }
 
@@ -47,11 +47,22 @@ public class PlayerGravity : MonoBehaviour
 
     private void ExecuteGravityInversion()
     {
+        if (!PlayerStats.Instance.UseMana(manaCost)) return;
         isGravityInverted = !isGravityInverted;
         lastUsedTime = Time.time;
 
         rb.gravityScale *= -1;
         transform.Rotate(180f, 0f, 0f);
+    }
+    public void ResetGravity()
+    {
+        if (isGravityInverted)
+        {
+            isGravityInverted = false;
+            rb.gravityScale = Mathf.Abs(rb.gravityScale); 
+            transform.rotation = Quaternion.identity;     
+            Debug.Log("Player: Đã khôi phục phương hướng trọng lực.");
+        }
     }
 
     private void OnDrawGizmosSelected()

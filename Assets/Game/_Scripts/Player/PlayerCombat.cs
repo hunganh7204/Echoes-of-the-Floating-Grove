@@ -13,6 +13,13 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private LayerMask enemyLayers;
 
     private float nextAttackTime = 0f;
+    [SerializeField] private Animator anim;
+
+    private void Start()
+    {
+        //anim = GetComponent<Animator>();
+        //if (anim == null) Debug.LogError("PlayerCombat: No Animator component found on player!");
+    }
 
     // Update is called once per frame
     void Update()
@@ -30,15 +37,17 @@ public class PlayerCombat : MonoBehaviour
 
     private void Attack()
     {
+        if (anim != null) anim.SetTrigger("2_Attack");
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
-        foreach(Collider2D enemy in hitEnemies)
+        foreach (Collider2D enemy in hitEnemies)
         {
             IDamageable damageable = enemy.GetComponent<IDamageable>();
-            if(damageable != null)
+            if (damageable != null)
             {
-                damageable.TakeDamage(attackDamage);
+                Vector2 knockbackDir = (enemy.transform.position - transform.position).normalized;
+                knockbackDir.y = 0.5f;
+                damageable.TakeDamage(attackDamage, knockbackDir);
             }
-            
         }
     }
 

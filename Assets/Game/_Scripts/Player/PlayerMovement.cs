@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 
@@ -20,12 +20,14 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
     private int jumpsLeft;
 
+    [SerializeField] private Animator anim;
+
     private float currentHorizontalInput;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    //void Start()
+    //{
+    //    anim = GetComponent<Animator>();
+    //}
 
     // Update is called once per frame
     void Update()
@@ -48,8 +50,38 @@ public class PlayerMovement : MonoBehaviour
 
 
         Flip();
+        UpdateAnimation();
     }
+    private void UpdateAnimation()
+    {
+        if (anim == null) return;
 
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+
+        // 1. Khóa khi đang thực hiện các hành động ưu tiên cao
+        if (stateInfo.IsName("ATTACK") || stateInfo.IsName("DAMAGED") || stateInfo.IsName("DEATH") || anim.IsInTransition(0))
+        {
+            return;
+        }
+
+        // 2. Bộ lọc nhiễu: Chỉ coi là di chuyển nếu bấm nút và vận tốc trục X thực sự lớn
+        bool isMovingHorizontally = Mathf.Abs(currentHorizontalInput) > 0.1f && Mathf.Abs(rb.linearVelocity.x) > 0.5f;
+
+        if (isGrounded && isMovingHorizontally)
+        {
+            if (!stateInfo.IsName("MOVE"))
+            {
+                anim.Play("MOVE");
+            }
+        }
+        else if (isGrounded && Mathf.Abs(rb.linearVelocity.y) < 0.5f) // Tăng độ bao dung cho trục Y lên 0.5f để lọc nhiễu sàn gạch
+        {
+            if (!stateInfo.IsName("IDLE") && Mathf.Abs(rb.linearVelocity.x) < 0.5f)
+            {
+                anim.Play("IDLE");
+            }
+        }
+    }
     private void FixedUpdate()
     {
         Move();
