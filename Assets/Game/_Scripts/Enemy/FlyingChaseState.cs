@@ -1,19 +1,18 @@
 ﻿using UnityEngine;
 
-public class EnemyChaseState : IEnemyState
+public class FlyingChaseState : IEnemyState
 {
     public void EnterState(EnemyBase enemy)
     {
         enemy.Anim.ResetTrigger("Attack");
         enemy.Anim.SetBool("isMoving", true);
-        Debug.Log($"<color=yellow>{enemy.gameObject.name} phát hiện mục tiêu! Bắt đầu truy đuổi.</color>");
+        Debug.Log($"<color=cyan>{enemy.gameObject.name} bay tới mục tiêu!</color>");
     }
 
     public void UpdateState(EnemyBase enemy)
     {
         float dist = enemy.DistanceToPlayer();
 
-        // 1. Logic chuyển trạng thái
         if (dist > enemy.SightRange)
         {
             enemy.ChangeState(enemy.returnState);
@@ -21,21 +20,20 @@ public class EnemyChaseState : IEnemyState
         }
         if (dist <= enemy.AttackRange)
         {
-            enemy.ChangeState(enemy.attackState); // Tiến vào tầm chém -> Đổi sang State Tấn công
+            enemy.ChangeState(enemy.attackState);
             return;
         }
 
-        // 2. Logic hành động (Truy đuổi)
         enemy.FaceTarget(enemy.PlayerTarget.position.x);
 
-        // Tính toán hướng đi tới người chơi (chỉ lấy trục X)
+        // Lấy hướng bay thẳng đến chỗ Player (tính cả X và Y)
         Vector2 direction = (enemy.PlayerTarget.position - enemy.transform.position).normalized;
-        enemy.RB.linearVelocity = new Vector2(direction.x * enemy.ChaseSpeed, enemy.RB.linearVelocity.y);
+        enemy.RB.linearVelocity = direction * enemy.ChaseSpeed;
     }
 
     public void ExitState(EnemyBase enemy)
     {
-        enemy.RB.linearVelocity = new Vector2(0, enemy.RB.linearVelocity.y);
+        enemy.RB.linearVelocity = Vector2.zero;
         enemy.Anim.SetBool("isMoving", false);
     }
 }

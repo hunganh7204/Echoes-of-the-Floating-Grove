@@ -7,11 +7,9 @@ public class EnemyAttackState : IEnemyState
 
     public void EnterState(EnemyBase enemy)
     {
-        // Khi bắt đầu vào tầm, cho phép đánh ngay lập tức (không cần chờ Cooldown lần đầu)
         lastAttackTime = Time.time - attackCooldown;
-
-        // Phanh gấp lại để không trượt đà vào người chơi
         enemy.RB.linearVelocity = new Vector2(0, enemy.RB.linearVelocity.y);
+        enemy.Anim.SetBool("isMoving", false);
     }
 
     public void UpdateState(EnemyBase enemy)
@@ -37,6 +35,8 @@ public class EnemyAttackState : IEnemyState
     private void PerformAttack(EnemyBase enemy)
     {
         Debug.Log($"<color=red>{enemy.gameObject.name} vung vũ khí tấn công!</color>");
+
+        enemy.Anim.SetTrigger("Attack");
 
         // Quét một vòng tròn quanh quái vật bằng với Tầm Đánh (AttackRange)
         Collider2D[] hits = Physics2D.OverlapCircleAll(enemy.transform.position, enemy.AttackRange);

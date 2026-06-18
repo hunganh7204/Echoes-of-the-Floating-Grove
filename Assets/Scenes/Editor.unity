@@ -735,6 +735,7 @@ MonoBehaviour:
   npcPrefab: {fileID: 6909484626341191397, guid: 3f7038117ac67ba458280f01ccb1979d, type: 3}
   finishPrefab: {fileID: 8867182168224824963, guid: cb34b2c6587a970458357f268a6d639d, type: 3}
   deadZonePrefab: {fileID: 4218030099621492667, guid: dc40852ed61465047a828a07391c405c, type: 3}
+  flyingEnemyPrefab: {fileID: 7563678683342561231, guid: efe06f4653bf70148a2aeef58d38d8c8, type: 3}
   tileSize: 1
   levelParent: {fileID: 0}
   currentLevelData:

@@ -26,9 +26,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
     protected IEnemyState currentState;
 
     // Khởi tạo sẵn các trạng thái
-    public EnemyPatrolState patrolState = new EnemyPatrolState();
-    public EnemyChaseState chaseState = new EnemyChaseState();
-    public EnemyAttackState attackState = new EnemyAttackState();
+    public IEnemyState patrolState = new EnemyPatrolState();
+    public IEnemyState chaseState = new EnemyChaseState();
+    public IEnemyState attackState = new EnemyAttackState();
+    public IEnemyState returnState = new EnemyReturnState();
 
     public float PatrolSpeed => patrolSpeed;
     public float ChaseSpeed => chaseSpeed;
@@ -39,6 +40,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public Animator Anim => anim;
 
     private Color originalColor;
+    public Vector2 SpawnPoint { get; private set; }
 
     protected virtual void Start()
     {
@@ -46,6 +48,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         currentHealth = maxHealth;
         playerTarget = PlayerController.Instance;
+        SpawnPoint = transform.position;
         ChangeState(patrolState);
     }
 

@@ -12,6 +12,9 @@ public class PlayerStats : MonoBehaviour, IDamageable
     private int currentHealth;
     private int currentMana;
 
+    public int CurrentHealth => currentHealth;
+    public int CurrentMana => currentMana;
+
     [Header("References")]
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private SpriteRenderer spriteRenderer;
@@ -26,7 +29,6 @@ public class PlayerStats : MonoBehaviour, IDamageable
 
     private void Start()
     {
-        //anim = GetComponent<Animator>();
         currentHealth = maxHealth;
         currentMana = maxMana;
 
@@ -107,5 +109,17 @@ public class PlayerStats : MonoBehaviour, IDamageable
             PlayerHUDUI.Instance.UpdateHealth(currentHealth, maxHealth);
             PlayerHUDUI.Instance.UpdateMana(currentMana, maxMana);
         }
+    }
+    public void LoadSavedStats(int savedHealth, int savedMana)
+    {
+        currentHealth = savedHealth;
+        currentMana = savedMana;
+
+        if (PlayerHUDUI.Instance != null)
+        {
+            PlayerHUDUI.Instance.UpdateHealth(currentHealth, maxHealth);
+            PlayerHUDUI.Instance.UpdateMana(currentMana, maxMana);
+        }
+        Debug.Log($"Player: Đã tải lại Máu ({currentHealth}) và Mana ({currentMana}) từ file save.");
     }
 }

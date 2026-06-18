@@ -29,8 +29,10 @@ public class DataManager : MonoBehaviour
     {
         try
         {
-            // Truyền currentLevel vào PlayerData
-            PlayerData dataToSave = new PlayerData(currentLevel, checkpointPosition, 100);
+            int currentHp = PlayerStats.Instance != null ? PlayerStats.Instance.CurrentHealth : 100;
+            int currentMp = PlayerStats.Instance != null ? PlayerStats.Instance.CurrentMana : 50;
+
+            PlayerData dataToSave = new PlayerData(currentLevel, checkpointPosition, currentHp, currentMp);
 
             string jsonText = JsonUtility.ToJson(dataToSave, true);
             File.WriteAllText(saveFilePath, jsonText);

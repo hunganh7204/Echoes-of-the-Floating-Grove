@@ -194,7 +194,14 @@ public class UIManager : MonoBehaviour
             if (ScoreManager.Instance != null) ScoreManager.Instance.ResetScore();
             Vector2 checkpointPos = new Vector2(savedData.positionX, savedData.positionY);
             LevelGenerator.Instance.LoadLevelAndSpawnPlayer(savedData.currentLevel, checkpointPos);
+
             ResetPlayerState();
+
+            var stats = player.GetComponent<PlayerStats>();
+            if (stats != null)
+            {
+                stats.LoadSavedStats(savedData.currentHealth, savedData.currentMana);
+            }
         }
         else StartNewGameFromMenu();
     }
@@ -247,4 +254,6 @@ public class UIManager : MonoBehaviour
         var gravity = player.GetComponent<PlayerGravity>();
         if (gravity != null) gravity.ResetGravity();
     }
+
+
 }

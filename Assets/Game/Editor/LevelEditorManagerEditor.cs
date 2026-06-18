@@ -24,6 +24,7 @@ public class LevelEditorManagerEditor : Editor
         if (GUILayout.Button("NPC ", GUILayout.Height(30))) manager.SetBrushType(5);
         if (GUILayout.Button("Điểm Kết Thúc", GUILayout.Height(30))) manager.SetBrushType(-2);
         if (GUILayout.Button("Vùng Chết", GUILayout.Height(30))) manager.SetBrushType(0);
+        if (GUILayout.Button("Quái Bay", GUILayout.Height(30))) manager.SetBrushType(6);
         GUILayout.EndHorizontal();
 
         GUILayout.Space(5);

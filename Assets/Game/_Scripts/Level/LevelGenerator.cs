@@ -11,6 +11,7 @@ public enum TileType
     Enemy_Slime = 3,
     TreasureChest = 4,
     NPC = 5,
+    FlyingEnemy = 6,
     Empty = 99
 }
 
@@ -31,6 +32,7 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private GameObject npcPrefab;
     [SerializeField] private GameObject finishPrefab;
     [SerializeField] private GameObject deadZonePrefab;
+    [SerializeField] private GameObject flyingEnemyPrefab;
 
     [Header("Settings")]
     public float tileSize = 1f;
@@ -91,6 +93,7 @@ public class LevelGenerator : MonoBehaviour
                     case TileType.NPC: prefabToUse = npcPrefab; break;
                     case TileType.Finish: prefabToUse = finishPrefab; break;
                     case TileType.DeadZone: prefabToUse = deadZonePrefab; break;
+                    case TileType.FlyingEnemy: prefabToUse = flyingEnemyPrefab; break;
                 }
 
                 if (prefabToUse != null)

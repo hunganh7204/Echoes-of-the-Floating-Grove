@@ -31,7 +31,7 @@ public class PauseMenuUI : MonoBehaviour
 
     private void OnLoadCheckpointClicked()
     {
-        UIManager.Instance.RestartLevel(true);
+        UIManager.Instance.ContinueGameFromMenu();
     }
 
     private void OnSettingsClicked()
