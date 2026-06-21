@@ -38,15 +38,24 @@ public class UIManager : MonoBehaviour
     private void Update()
     {
         if (InputManager.Instance.PausePressed)
-        {
-            if (currentActivePanel == settingsPanel) CloseSettings();
-            else if (currentActivePanel == null || currentActivePanel == pauseMenuPanel) TogglePauseMenu();
+        {     
+            if (DialogueManager.IsChatting)
+            {
+                DialogueManager.Instance.EndDialogue();
+                return;
+            }
+            if (currentActivePanel == settingsPanel)
+            {
+                CloseSettings();
+            }
+            else if (currentActivePanel == null || currentActivePanel == pauseMenuPanel)
+            {
+                TogglePauseMenu();
+            }
         }
     }
 
-    // ==========================================
-    // CÁC HÀM ĐIỀU HƯỚNG UI (ĐÃ TÍCH HỢP HIỆU ỨNG MƯỢT)
-    // ==========================================
+
 
     public void ShowMainMenu()
     {
@@ -108,9 +117,7 @@ public class UIManager : MonoBehaviour
         ShowMainMenu();
     }
 
-    // ==========================================
-    // HỆ THỐNG ANIMATION UI MƯỢT MÀ
-    // ==========================================
+
 
     private void TransitionToPanel(GameObject newPanel)
     {

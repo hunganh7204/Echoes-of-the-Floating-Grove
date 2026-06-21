@@ -154,7 +154,10 @@ MonoBehaviour:
   mapSize: {x: 90, y: 90}
   cameraMoveSpeed: 15
   cameraZoomSpeed: 2
-  levelNameToLoad: Level_1
+  gridBackgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  gridLineColor: {r: 1, g: 1, b: 1, a: 0.2}
+  mapBorderColor: {r: 1, g: 0.9815198, b: 0, a: 1}
+  levelNameToLoad: Level_2
   editorCamera: {fileID: 251630020}
   gameplayCamera: {fileID: 1197617502}
 --- !u!4 &25724487
@@ -736,6 +739,9 @@ MonoBehaviour:
   finishPrefab: {fileID: 8867182168224824963, guid: cb34b2c6587a970458357f268a6d639d, type: 3}
   deadZonePrefab: {fileID: 4218030099621492667, guid: dc40852ed61465047a828a07391c405c, type: 3}
   flyingEnemyPrefab: {fileID: 7563678683342561231, guid: efe06f4653bf70148a2aeef58d38d8c8, type: 3}
+  npc2Prefab: {fileID: 6909484626341191397, guid: 7a06f997b82403341b52b5aa3f8bc08f, type: 3}
+  dirtPrefab: {fileID: 5486676942700563680, guid: e84aad4bc06ff5c48afcd5bdde463204, type: 3}
+  npc3Prefab: {fileID: 6909484626341191397, guid: bb0e5752b4d3fd74281ae0dc218dad23, type: 3}
   tileSize: 1
   levelParent: {fileID: 0}
   currentLevelData:

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2147284892383476026}
   - component: {fileID: 6451623367116164187}
+  - component: {fileID: 910751447036400364}
   m_Layer: 0
   m_Name: Frame_0
   m_TagString: Untagged
@@ -26,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 1124097591950520064}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.21, y: -1.571, z: 0}
-  m_LocalScale: {x: 6.8, y: 3.1817062, z: 6.5463605}
+  m_LocalPosition: {x: -0.1971, y: -1.4154, z: 0}
+  m_LocalScale: {x: 6.961307, y: 2.7925432, z: 6.5463605}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7812832711513917947}
@@ -87,6 +88,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &910751447036400364
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1124097591950520064}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6a8b68a885be750499d23f28f29dfaf9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6909484626341191397
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,12 +259,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcName: Tester 1
-  greetingMessage: "Ta l\xE0 1 chi\u1EBFn binh, ta c\xF3 th\u1EC3 h\u01B0\u1EDBng
-    d\u1EABn ng\u01B0\u01A1i c\xE1ch di chuy\u1EC3n."
-  npcPersona: "B\u1EA1n l\xE0 m\u1ED9t chi\u1EBFn binh d\xE0y d\u1EB7n kinh nghi\u1EC7m,
-    b\u1EA1n s\u1EBD x\u01B0ng ta v\xE0 g\u1ECDi \u0111\u1ED1i ph\u01B0\u01A1ng l\xE0
-    ng\u01B0\u01A1i, b\u1EA1n l\xE0 ng\u01B0\u1EDDi kh\u1EA3ng kh\xE1i, b\u1ED9c
-    tr\u1EF1c v\xE0 nhi\u1EC7t huy\u1EBFt"
+  greetingMessage: "Xin ch\xE0o, t\xF4i c\xF3 th\u1EC3 gi\xFAp b\u1EA1n di chuy\u1EC3n
+    linh ho\u1EA1t."
+  npcPersona: "B\u1EA1n l\xE0 m\u1ED9t chi\u1EBFn binh m\u1EDBi, b\u1EA1n s\u1EBD
+    x\u01B0ng t\xF4i v\xE0 g\u1ECDi \u0111\u1ED1i ph\u01B0\u01A1ng l\xE0 b\u1EA1n,
+    b\u1EA1n l\xE0 ng\u01B0\u1EDDi nhi\u1EC7t t\xECnh nh\u01B0ng c\xF3 ch\xFAt nh\xFAt
+    nh\xE1t"
   npcLore: "\u0110\xE2y l\xE0 r\xECa khu r\u1EEBng kh\u1EDFi \u0111\u1EA7u, NPC h\u01B0\u1EDBng
     d\u1EABn t\xE2n th\u1EE7 c\xE1ch di chuy\u1EC3n.  N\u1EBFu ng\u01B0\u1EDDi ch\u01A1i
     h\u1ECFi c\xE1c c\xE2u h\u1ECFi kh\xE1c, h\xE3y t\xF9y bi\u1EBFn tr\u1EA3 l\u1EDDi
@@ -252,8 +275,14 @@ MonoBehaviour:
     t\u1EDBi t\u1EEB di chuy\u1EC3n s\u1EBD tr\u1EA3 l\u1EDDi sau."
   fixedResponses:
   - keyword: "di chuy\u1EC3n"
-    answer: "Ng\u01B0\u01A1i h\xE3y s\u1EED d\u1EE5ng c\xE1c ph\xEDm A,D \u0111\u1EC3
-      di chuy\u1EC3n tr\xE1i, ph\u1EA3i, ph\xEDm space s\u1EBD gi\xFAp ng\u01B0\u1EDDi
-      nh\u1EA3y, nh\u1EA5n l\u1EA7n n\u1EEFa s\u1EBD nh\u1EA3y 2 l\u1EA7n."
-  spriteRenderer: {fileID: 4552087069423653860}
+    answer: "B\u1EA1n h\xE3y s\u1EED d\u1EE5ng c\xE1c ph\xEDm A,D \u0111\u1EC3 di
+      chuy\u1EC3n tr\xE1i, ph\u1EA3i, ph\xEDm space s\u1EBD gi\xFAp b\u1EA1n nh\u1EA3y,
+      nh\u1EA5n l\u1EA7n n\u1EEFa s\u1EBD th\u1EF1c hi\u1EC7n nh\u1EA3y k\xE9p. H\xE3y
+      th\u1EED v\u01B0\u1EE3t qua c\xE1c h\u1ED1 s\xE2u b\xEAn kia \u0111i."
+  - keyword: di chuyen
+    answer: "B\u1EA1n h\xE3y s\u1EED d\u1EE5ng c\xE1c ph\xEDm A,D \u0111\u1EC3 di
+      chuy\u1EC3n tr\xE1i, ph\u1EA3i, ph\xEDm space s\u1EBD gi\xFAp b\u1EA1n nh\u1EA3y,
+      nh\u1EA5n l\u1EA7n n\u1EEFa s\u1EBD th\u1EF1c hi\u1EC7n nh\u1EA3y k\xE9p. H\xE3y
+      th\u1EED v\u01B0\u1EE3t qua c\xE1c h\u1ED1 s\xE2u b\xEAn kia \u0111i."
+  spriteRenderer: {fileID: 6451623367116164187}
   boxCollider: {fileID: 6758877767843469526}

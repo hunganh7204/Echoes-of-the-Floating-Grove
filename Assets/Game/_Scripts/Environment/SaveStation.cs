@@ -31,20 +31,13 @@ public class SaveStation : MonoBehaviour, IInteractable
 
     public void ShowInteractionPrompt()
     {
-        if (!isSaved)
-        {
-            Debug.Log("UI: Nhấn [F] để Lưu trò chơi (Nghỉ ngơi)");
-        }
+        if (InteractionPromptUI.Instance != null)
+            InteractionPromptUI.Instance.ShowPrompt("Lưu tiến trình", transform);
     }
 
     public void HideInteractionPrompt()
     {
-        Debug.Log("UI: Ẩn nhắc nhở Lưu trò chơi");
-
-        // Trả lại màu cũ (hoặc giữ nguyên màu cam nếu bạn muốn lửa cứ cháy mãi sau khi save)
-        if (!isSaved)
-        {
-            spriteRenderer.color = Color.white;
-        }
+        if (InteractionPromptUI.Instance != null)
+            InteractionPromptUI.Instance.HidePrompt();
     }
 }

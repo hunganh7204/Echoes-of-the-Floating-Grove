@@ -8,17 +8,18 @@ using UnityEngine.InputSystem;
 
         private PlayerControls playerControls;
 
-    public float HorizontalMovement => DialogueManager.IsChatting ? 0f : playerControls.Player.Move.ReadValue<float>();
+    public float HorizontalMovement => (DialogueManager.IsChatting || Time.timeScale == 0f) ? 0f : playerControls.Player.Move.ReadValue<float>();
 
-    public bool JumpPressed => !DialogueManager.IsChatting && playerControls.Player.Jump.WasPressedThisFrame();
-    public bool InteractPressed => !DialogueManager.IsChatting && playerControls.Player.Interact.WasPressedThisFrame();
-    public bool AttackPressed => !DialogueManager.IsChatting && playerControls.Player.Attack.WasPressedThisFrame();
-    public bool GravityPressed => !DialogueManager.IsChatting && playerControls.Player.Gravity.WasPressedThisFrame();
-    public bool RecordEchoPressed => !DialogueManager.IsChatting && playerControls.Player.RecordEcho.WasPressedThisFrame();
-    public bool ReplayEchoPressed => !DialogueManager.IsChatting && playerControls.Player.ReplayEcho.WasPressedThisFrame();
-    public bool CancelEchoPressed => !DialogueManager.IsChatting && playerControls.Player.CancelEcho.WasPressedThisFrame();
-    public bool SprintHeld => !DialogueManager.IsChatting && playerControls.Player.Sprint.IsPressed();
+    public bool JumpPressed => !DialogueManager.IsChatting && Time.timeScale > 0f && playerControls.Player.Jump.WasPressedThisFrame();
 
+    public bool InteractPressed => !DialogueManager.IsChatting && Time.timeScale > 0f && playerControls.Player.Interact.WasPressedThisFrame();
+
+    public bool AttackPressed => !DialogueManager.IsChatting && Time.timeScale > 0f && playerControls.Player.Attack.WasPressedThisFrame();
+    public bool GravityPressed => !DialogueManager.IsChatting && Time.timeScale > 0f && playerControls.Player.Gravity.WasPressedThisFrame();
+    public bool RecordEchoPressed => !DialogueManager.IsChatting && Time.timeScale > 0f && playerControls.Player.RecordEcho.WasPressedThisFrame();
+    public bool ReplayEchoPressed => !DialogueManager.IsChatting && Time.timeScale > 0f && playerControls.Player.ReplayEcho.WasPressedThisFrame();
+    public bool CancelEchoPressed => !DialogueManager.IsChatting && Time.timeScale > 0f && playerControls.Player.CancelEcho.WasPressedThisFrame();
+    public bool SprintHeld => !DialogueManager.IsChatting && Time.timeScale > 0f && playerControls.Player.Sprint.IsPressed();
     public bool PausePressed => playerControls.Player.Pause.WasPressedThisFrame();
 
     private void Awake()
@@ -47,13 +48,12 @@ using UnityEngine.InputSystem;
     // ==========================================
     // 1. HÀM TRẢ VỀ TÊN PHÍM HIỂN THỊ CHO UI
     // ==========================================
-    public string GetBindingName(string actionName)
+    public string GetBindingName(string actionName, int bindingIndex = 0)
     {
         InputAction action = playerControls.asset.FindAction(actionName);
         if (action != null)
         {
-            // Lấy tên hiển thị của phím ở vị trí index 0
-            return action.GetBindingDisplayString(0);
+            return action.GetBindingDisplayString(bindingIndex);
         }
         return "Trống";
     }
@@ -81,45 +81,68 @@ using UnityEngine.InputSystem;
     // ==========================================
     // 3. CẬP NHẬT LẠI HÀM ĐỔI PHÍM (REBIND)
     // ==========================================
-    public void RebindAction(string actionName, Action onRebindComplete)
+    public void RebindAction(string actionName, Action onRebindComplete, int bindingIndex = 0)
     {
         InputAction actionToRebind = playerControls.asset.FindAction(actionName);
         if (actionToRebind == null) return;
 
+        string oldBindingPath = actionToRebind.bindings[bindingIndex].effectivePath;
+
         actionToRebind.Disable();
 
-        // Lưu lại phím cũ để hoán đổi
-        string oldBindingPath = actionToRebind.bindings[0].effectivePath;
-
-        var rebindOperation = actionToRebind.PerformInteractiveRebinding(0)
+        var operation = actionToRebind.PerformInteractiveRebinding(bindingIndex)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation =>
+            .OnComplete(op =>
             {
-                string newBindingPath = actionToRebind.bindings[0].effectivePath;
+                string newBindingPath = actionToRebind.bindings[bindingIndex].effectivePath;
 
-                // KIỂM TRA VÀ HOÁN ĐỔI NẾU TRÙNG LẶP
                 InputAction conflictingAction = GetConflictingAction(actionToRebind, newBindingPath);
                 if (conflictingAction != null)
                 {
                     Debug.Log($"Hệ thống: Trùng phím! Đang hoán đổi phím sang {conflictingAction.name}");
-                    // Gán phím cũ của hành động hiện tại cho hành động bị trùng
-                    conflictingAction.ApplyBindingOverride(0, oldBindingPath);
+
+                    int conflictIndex = -1;
+                    for (int i = 0; i < conflictingAction.bindings.Count; i++)
+                    {
+                        if (conflictingAction.bindings[i].effectivePath == newBindingPath)
+                        {
+                            conflictIndex = i;
+                            break;
+                        }
+                    }
+
+                    if (conflictIndex != -1)
+                    {
+                        conflictingAction.ApplyBindingOverride(conflictIndex, oldBindingPath);
+                    }
                 }
 
-                operation.Dispose();
+                op.Dispose();
                 actionToRebind.Enable();
 
-                // Chỉ báo là đã xong, để UI tự quét lại toàn bộ
+                SaveBindingsToData();
                 onRebindComplete?.Invoke();
             })
-            .OnCancel(operation =>
+            .OnCancel(op =>
             {
-                operation.Dispose();
+                op.Dispose();
                 actionToRebind.Enable();
                 onRebindComplete?.Invoke();
             })
             .Start();
+    }
+
+    public void ResetBindingsToDefault()
+    {
+        // Xóa toàn bộ ghi đè phím của Input System
+        playerControls.asset.RemoveAllBindingOverrides();
+
+        // Xóa dữ liệu phím đã lưu trong ổ cứng
+        PlayerPrefs.DeleteKey("InputBindings");
+        PlayerPrefs.Save();
+
+        Debug.Log("Hệ thống: Đã khôi phục phím bấm về mặc định!");
     }
 
     public void SaveBindingsToData()

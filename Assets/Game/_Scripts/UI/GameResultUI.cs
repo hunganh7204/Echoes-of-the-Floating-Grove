@@ -25,12 +25,13 @@ public class GameResultUI : MonoBehaviour
 
     public void SetupPanel(bool isVictory, int currentLevel, int score)
     {
-        titleText.text = isVictory ? "CHIẾN THẮNG!" : "BẠN ĐÃ GỤC NGÃ!";
-        titleText.color = isVictory ? Color.green : Color.red;
+        titleText.text = isVictory ? "VICTORY!" : "YOU LOSE";
+        titleText.color = isVictory
+    ? new Color32(46, 125, 50, 255)  
+    : new Color32(198, 40, 40, 255);
 
-        levelText.text = $"Màn chơi: {currentLevel}";
-        scoreText.text = $"Điểm số: {score}";
-
+        levelText.text = $"Level: {currentLevel}";
+        scoreText.text = $"Score: {score}";
         nextLevelButton.gameObject.SetActive(isVictory);
         loadCheckpointButton.gameObject.SetActive(!isVictory); 
     }

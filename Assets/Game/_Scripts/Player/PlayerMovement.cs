@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -15,6 +14,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private LayerMask groundLayer;
 
+    [Header("Stamina Costs")]
+    [SerializeField] private float sprintStaminaCost = 20f; // Tốn 20 điểm mỗi giây chạy
+    [SerializeField] private float doubleJumpStaminaCost = 15f;
+
     [SerializeField]private Rigidbody2D rb;
     private bool isFacingRight = true;
     private bool isGrounded;
@@ -23,13 +26,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Animator anim;
 
     private float currentHorizontalInput;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    //void Start()
-    //{
-    //    anim = GetComponent<Animator>();
-    //}
 
-    // Update is called once per frame
     void Update()
     {
         CheckGround();
@@ -40,11 +37,24 @@ public class PlayerMovement : MonoBehaviour
         }
 
         currentHorizontalInput = InputManager.Instance.HorizontalMovement;
+
         if (InputManager.Instance.JumpPressed)
         {
-            if (isGrounded || jumpsLeft > 0)
+            if (isGrounded)
             {
                 Jump();
+            }
+            else if (jumpsLeft > 0)
+            {
+                if (PlayerStats.Instance.CanUseStamina(doubleJumpStaminaCost))
+                {
+                    PlayerStats.Instance.ConsumeStamina(doubleJumpStaminaCost);
+                    Jump();
+                }
+                else
+                {
+                    Debug.Log("UI: Không đủ thể lực để nhảy đôi!");
+                }
             }
         }
 
@@ -90,9 +100,17 @@ public class PlayerMovement : MonoBehaviour
     private void Move()
     {
         float currentSpeed = baseSpeed;
-        if (InputManager.Instance.SprintHeld)
+
+        // Kiểm tra xem người chơi có đang cố di chuyển không
+        bool isMoving = Mathf.Abs(currentHorizontalInput) > 0.1f;
+
+        // Nếu giữ phím chạy + có di chuyển + còn thể lực -> Chạy nhanh và trừ thể lực
+        if (InputManager.Instance.SprintHeld && isMoving && PlayerStats.Instance.CurrentStamina > 0)
         {
             currentSpeed *= sprintMultiplier;
+
+            // Trừ thể lực liên tục (Dùng fixedDeltaTime vì đang ở trong FixedUpdate)
+            PlayerStats.Instance.ConsumeStamina(sprintStaminaCost * Time.fixedDeltaTime);
         }
 
         rb.linearVelocity = new Vector2(currentHorizontalInput * currentSpeed, rb.linearVelocity.y);

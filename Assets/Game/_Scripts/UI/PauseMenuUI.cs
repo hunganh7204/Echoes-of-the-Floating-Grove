@@ -10,13 +10,21 @@ public class PauseMenuUI : MonoBehaviour
     [SerializeField] private Button settingsButton;
     [SerializeField] private Button quitButton;
 
+    [Header("Quit Confirmation Pop-up")]
+    [SerializeField] private GameObject quitConfirmPanel;
+    [SerializeField] private Button confirmQuitButton;    
+    [SerializeField] private Button cancelQuitButton;
+
     private void Start()
     {
         resumeButton.onClick.AddListener(OnResumeClicked);
         restartButton.onClick.AddListener(OnRestartClicked);
         loadCheckpointButton.onClick.AddListener(OnLoadCheckpointClicked);
         settingsButton.onClick.AddListener(OnSettingsClicked);
-        quitButton.onClick.AddListener(OnQuitClicked);
+        if (quitButton != null) quitButton.onClick.AddListener(ShowQuitConfirm);
+        if (confirmQuitButton != null) confirmQuitButton.onClick.AddListener(ExecuteQuit);
+        if (cancelQuitButton != null) cancelQuitButton.onClick.AddListener(HideQuitConfirm);
+        if (quitConfirmPanel != null) quitConfirmPanel.SetActive(false);
     }
 
     private void OnResumeClicked()
@@ -39,8 +47,36 @@ public class PauseMenuUI : MonoBehaviour
         UIManager.Instance.OpenSettings();
     }
 
-    private void OnQuitClicked()
+    //private void OnQuitClicked()
+    //{
+    //    UIManager.Instance.ReturnToMainMenu();
+    //}
+
+    private void OnDisable()
     {
-        UIManager.Instance.ReturnToMainMenu();
+        if (quitConfirmPanel != null) quitConfirmPanel.SetActive(false);
+    }
+
+    private void ShowQuitConfirm()
+    {
+        if (quitConfirmPanel != null) quitConfirmPanel.SetActive(true);
+    }
+
+    private void HideQuitConfirm()
+    {
+        if (quitConfirmPanel != null) quitConfirmPanel.SetActive(false);
+    }
+
+    private void ExecuteQuit()
+    {
+        HideQuitConfirm();
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ReturnToMainMenu();
+        }
+        else
+        {
+            Application.Quit();
+        }
     }
 }

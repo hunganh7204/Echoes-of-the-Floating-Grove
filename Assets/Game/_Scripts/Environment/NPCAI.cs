@@ -44,11 +44,19 @@ public class NPCAI : MonoBehaviour, IInteractable
 
     public void ShowInteractionPrompt()
     {
-        spriteRenderer.color = Color.cyan;
+        if (InteractionPromptUI.Instance != null)
+            InteractionPromptUI.Instance.ShowPrompt("Trò chuyện", transform);
     }
 
     public void HideInteractionPrompt()
     {
-        spriteRenderer.color = Color.white;
+        if (InteractionPromptUI.Instance != null)
+            InteractionPromptUI.Instance.HidePrompt();
+    }
+
+    public Sprite GetSprite()
+    {
+        if (spriteRenderer != null) return spriteRenderer.sprite;
+        return null;
     }
 }

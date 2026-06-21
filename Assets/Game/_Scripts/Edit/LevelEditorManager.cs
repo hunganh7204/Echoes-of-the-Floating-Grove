@@ -15,6 +15,12 @@ public class LevelEditorManager : MonoBehaviour
     [SerializeField] private float cameraMoveSpeed = 15f;
     [SerializeField] private float cameraZoomSpeed = 2f;
 
+    // --- BỔ SUNG SETTING ĐỂ TÙY CHỈNH MÀU LƯỚI ---
+    [Header("Grid Visuals")]
+    [SerializeField] private Color gridBackgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.4f); // Màu nền hơi tối và trong suốt
+    [SerializeField] private Color gridLineColor = new Color(1f, 1f, 1f, 0.2f);           // Màu vạch chia ô (trắng mờ)
+    [SerializeField] private Color mapBorderColor = Color.green;                          // Màu viền bao quanh Map
+
     public string levelNameToLoad = "Level_1";
 
     [Header("Cameras")]
@@ -74,15 +80,19 @@ public class LevelEditorManager : MonoBehaviour
         Vector3 mouseWorldPos = editorCamera.ScreenToWorldPoint(Input.mousePosition);
         mouseWorldPos.z = 0f;
 
-        int x = Mathf.RoundToInt(mouseWorldPos.x / levelGenerator.tileSize);
-        int y = Mathf.RoundToInt(mouseWorldPos.y / levelGenerator.tileSize);
+      
+        int x = Mathf.FloorToInt(mouseWorldPos.x / levelGenerator.tileSize);
+        int y = Mathf.FloorToInt(mouseWorldPos.y / levelGenerator.tileSize);
 
         if (x >= 0 && x < mapSize.x && y >= 0 && y < mapSize.y)
         {
             if (hoverCursor != null)
             {
                 hoverCursor.gameObject.SetActive(true);
-                hoverCursor.position = new Vector3(x * levelGenerator.tileSize, y * levelGenerator.tileSize, 0f);
+
+                
+                float offset = levelGenerator.tileSize / 2f;
+                hoverCursor.position = new Vector3(x * levelGenerator.tileSize + offset, y * levelGenerator.tileSize + offset, 0f);
             }
 
             if (Input.GetMouseButton(0) || Input.GetMouseButton(1))
@@ -170,5 +180,37 @@ public class LevelEditorManager : MonoBehaviour
     public void SaveMap()
     {
         DataManager.Instance.SaveCurrentEditedMap();
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (isTesting || levelGenerator == null) return;
+
+        float tileSize = levelGenerator.tileSize;
+        float width = mapSize.x * tileSize;
+        float height = mapSize.y * tileSize;
+
+        Vector3 center = new Vector3(width / 2f, height / 2f, 0f);
+        Vector3 size = new Vector3(width, height, 0f);
+
+        Gizmos.color = gridBackgroundColor;
+        Gizmos.DrawCube(center, size);
+
+        Gizmos.color = gridLineColor;
+
+        for (int x = 0; x <= mapSize.x; x++)
+        {
+            float posX = x * tileSize;
+            Gizmos.DrawLine(new Vector3(posX, 0, 0), new Vector3(posX, height, 0));
+        }
+
+        for (int y = 0; y <= mapSize.y; y++)
+        {
+            float posY = y * tileSize;
+            Gizmos.DrawLine(new Vector3(0, posY, 0), new Vector3(width, posY, 0));
+        }
+
+        Gizmos.color = mapBorderColor;
+        Gizmos.DrawWireCube(center, size);
     }
 }

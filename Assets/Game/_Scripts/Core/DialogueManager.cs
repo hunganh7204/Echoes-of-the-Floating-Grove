@@ -9,10 +9,10 @@ public class DialogueManager : MonoBehaviour
 
     [Header("API Config")]
     [SerializeField] private string apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent";
-    [SerializeField] private string apiKey = "YOUR_API_KEY_HERE";
+    private string apiKey;
 
     private NPCAI currentNPC;
-    private string internalChatHistory = ""; // Lịch sử ngầm gửi cho AI
+    private string internalChatHistory = ""; 
     private bool isWaitingForAI = false;
 
     public static bool IsChatting { get; private set; }
@@ -21,6 +21,22 @@ public class DialogueManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) Destroy(gameObject);
         else Instance = this;
+
+        LoadApiKey();
+    }
+
+    private void LoadApiKey()
+    {
+        // Đọc file ApiKey.txt từ thư mục Resources
+        TextAsset keyFile = Resources.Load<TextAsset>("ApiKey");
+        if (keyFile != null)
+        {
+            apiKey = keyFile.text.Trim();
+        }
+        else
+        {
+            Debug.LogError("Bảo mật: Không tìm thấy file ApiKey.txt trong thư mục Resources!");
+        }
     }
 
     public void StartDialogue(NPCAI npc)
@@ -32,7 +48,7 @@ public class DialogueManager : MonoBehaviour
         IsChatting = true;     // Bật cờ Khóa Input
         Time.timeScale = 0f;   // Đóng băng thế giới vật lý
 
-        DialogueUI.Instance.ShowDialogueBox(npc.npcName, npc.greetingMessage);
+        DialogueUI.Instance.ShowDialogueBox(npc.npcName, npc.greetingMessage, npc.GetSprite());
         internalChatHistory += $"NPC: {npc.greetingMessage}\n";
     }
 

@@ -23,8 +23,14 @@ public class LevelEditorManagerEditor : Editor
         if (GUILayout.Button("Rương ", GUILayout.Height(30))) manager.SetBrushType(4);
         if (GUILayout.Button("NPC ", GUILayout.Height(30))) manager.SetBrushType(5);
         if (GUILayout.Button("Điểm Kết Thúc", GUILayout.Height(30))) manager.SetBrushType(-2);
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
         if (GUILayout.Button("Vùng Chết", GUILayout.Height(30))) manager.SetBrushType(0);
         if (GUILayout.Button("Quái Bay", GUILayout.Height(30))) manager.SetBrushType(6);
+        if (GUILayout.Button("NPC2", GUILayout.Height(30))) manager.SetBrushType(7);
+        if (GUILayout.Button("Đất", GUILayout.Height(30))) manager.SetBrushType(8);
+        if (GUILayout.Button("NPC3", GUILayout.Height(30))) manager.SetBrushType(9);
         GUILayout.EndHorizontal();
 
         GUILayout.Space(5);

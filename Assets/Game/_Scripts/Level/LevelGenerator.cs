@@ -10,8 +10,11 @@ public enum TileType
     Checkpoint = 2,
     Enemy_Slime = 3,
     TreasureChest = 4,
-    NPC = 5,
+    NPC1 = 5,
     FlyingEnemy = 6,
+    NPC2 = 7,
+    Dirt = 8,
+    NPC3 = 9,
     Empty = 99
 }
 
@@ -33,6 +36,9 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private GameObject finishPrefab;
     [SerializeField] private GameObject deadZonePrefab;
     [SerializeField] private GameObject flyingEnemyPrefab;
+    [SerializeField] private GameObject npc2Prefab;
+    [SerializeField] private GameObject dirtPrefab;
+    [SerializeField] private GameObject npc3Prefab;
 
     [Header("Settings")]
     public float tileSize = 1f;
@@ -63,7 +69,7 @@ public class LevelGenerator : MonoBehaviour
         hasStartPos = false;
 
         int lengthY = currentLevelData.grid.Count;
-
+        float offset = tileSize / 2f;
         for (int y = 0; y < lengthY; y++)
         {
             MapRow row = currentLevelData.grid[y];
@@ -74,7 +80,7 @@ public class LevelGenerator : MonoBehaviour
 
                 if (currentType == TileType.Empty) continue;
 
-                Vector3 spawnPos = new Vector3(x * tileSize, y * tileSize, 0f);
+                Vector3 spawnPos = new Vector3(x * tileSize + offset, y * tileSize + offset, 0f);
                 GameObject prefabToUse = null;
 
                 if (currentType == TileType.Start)
@@ -90,10 +96,13 @@ public class LevelGenerator : MonoBehaviour
                     case TileType.Checkpoint: prefabToUse = checkpointPrefab; break;
                     case TileType.Enemy_Slime: prefabToUse = slimePrefab; break;
                     case TileType.TreasureChest: prefabToUse = chestPrefab; break;
-                    case TileType.NPC: prefabToUse = npcPrefab; break;
+                    case TileType.NPC1: prefabToUse = npcPrefab; break;
                     case TileType.Finish: prefabToUse = finishPrefab; break;
                     case TileType.DeadZone: prefabToUse = deadZonePrefab; break;
                     case TileType.FlyingEnemy: prefabToUse = flyingEnemyPrefab; break;
+                    case TileType.NPC2: prefabToUse = npc2Prefab; break;
+                    case TileType.Dirt: prefabToUse = dirtPrefab; break;
+                    case TileType.NPC3: prefabToUse = npc3Prefab; break;
                 }
 
                 if (prefabToUse != null)
