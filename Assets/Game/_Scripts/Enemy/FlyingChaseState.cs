@@ -6,7 +6,6 @@ public class FlyingChaseState : IEnemyState
     {
         enemy.Anim.ResetTrigger("Attack");
         enemy.Anim.SetBool("isMoving", true);
-        Debug.Log($"<color=cyan>{enemy.gameObject.name} bay tới mục tiêu!</color>");
     }
 
     public void UpdateState(EnemyBase enemy)
@@ -26,7 +25,6 @@ public class FlyingChaseState : IEnemyState
 
         enemy.FaceTarget(enemy.PlayerTarget.position.x);
 
-        // Lấy hướng bay thẳng đến chỗ Player (tính cả X và Y)
         Vector2 direction = (enemy.PlayerTarget.position - enemy.transform.position).normalized;
         enemy.RB.linearVelocity = direction * enemy.ChaseSpeed;
     }

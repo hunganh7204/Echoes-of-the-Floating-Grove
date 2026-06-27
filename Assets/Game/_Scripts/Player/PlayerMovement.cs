@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
 
     [Header("Stamina Costs")]
-    [SerializeField] private float sprintStaminaCost = 20f; // Tốn 20 điểm mỗi giây chạy
+    [SerializeField] private float sprintStaminaCost = 20f; 
     [SerializeField] private float doubleJumpStaminaCost = 15f;
 
     [SerializeField]private Rigidbody2D rb;
@@ -53,7 +53,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("UI: Không đủ thể lực để nhảy đôi!");
+                    Debug.Log("Không đủ thể lực để nhảy đôi!");
                 }
             }
         }
@@ -68,13 +68,11 @@ public class PlayerMovement : MonoBehaviour
 
         AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
-        // 1. Khóa khi đang thực hiện các hành động ưu tiên cao
         if (stateInfo.IsName("ATTACK") || stateInfo.IsName("DAMAGED") || stateInfo.IsName("DEATH") || anim.IsInTransition(0))
         {
             return;
         }
 
-        // 2. Bộ lọc nhiễu: Chỉ coi là di chuyển nếu bấm nút và vận tốc trục X thực sự lớn
         bool isMovingHorizontally = Mathf.Abs(currentHorizontalInput) > 0.1f && Mathf.Abs(rb.linearVelocity.x) > 0.5f;
 
         if (isGrounded && isMovingHorizontally)
@@ -84,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
                 anim.Play("MOVE");
             }
         }
-        else if (isGrounded && Mathf.Abs(rb.linearVelocity.y) < 0.5f) // Tăng độ bao dung cho trục Y lên 0.5f để lọc nhiễu sàn gạch
+        else if (isGrounded && Mathf.Abs(rb.linearVelocity.y) < 0.5f) 
         {
             if (!stateInfo.IsName("IDLE") && Mathf.Abs(rb.linearVelocity.x) < 0.5f)
             {
@@ -101,15 +99,12 @@ public class PlayerMovement : MonoBehaviour
     {
         float currentSpeed = baseSpeed;
 
-        // Kiểm tra xem người chơi có đang cố di chuyển không
         bool isMoving = Mathf.Abs(currentHorizontalInput) > 0.1f;
 
-        // Nếu giữ phím chạy + có di chuyển + còn thể lực -> Chạy nhanh và trừ thể lực
         if (InputManager.Instance.SprintHeld && isMoving && PlayerStats.Instance.CurrentStamina > 0)
         {
             currentSpeed *= sprintMultiplier;
 
-            // Trừ thể lực liên tục (Dùng fixedDeltaTime vì đang ở trong FixedUpdate)
             PlayerStats.Instance.ConsumeStamina(sprintStaminaCost * Time.fixedDeltaTime);
         }
 

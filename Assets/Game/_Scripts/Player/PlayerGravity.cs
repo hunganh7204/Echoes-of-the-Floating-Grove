@@ -61,7 +61,6 @@ public class PlayerGravity : MonoBehaviour
             isGravityInverted = false;
             rb.gravityScale = Mathf.Abs(rb.gravityScale); 
             transform.rotation = Quaternion.identity;     
-            Debug.Log("Player: Đã khôi phục phương hướng trọng lực.");
         }
     }
 

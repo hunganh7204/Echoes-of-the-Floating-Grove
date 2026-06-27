@@ -4,9 +4,9 @@ using System.Collections.Generic;
 [System.Serializable]
 public class FixedResponse
 {
-    public string keyword; // Từ khóa (VD: "boss", "chìa khóa")
+    public string keyword; 
     [TextArea(2, 4)]
-    public string answer;  // Câu trả lời cố định
+    public string answer; 
 }
 
 public class NPCAI : MonoBehaviour, IInteractable
@@ -15,7 +15,7 @@ public class NPCAI : MonoBehaviour, IInteractable
     public string npcName = "Testing";
 
     [TextArea(2, 4)]
-    public string greetingMessage = "Ngươi tìm ta có việc gì, Kẻ lang thang?"; // Câu nói đầu tiên
+    public string greetingMessage = "Ngươi tìm ta có việc gì, Kẻ lang thang?"; 
 
     [Header("2. Thiết lập AI")]
     [TextArea(3, 5)]

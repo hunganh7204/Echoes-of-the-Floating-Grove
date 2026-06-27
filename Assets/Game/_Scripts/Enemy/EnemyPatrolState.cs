@@ -2,9 +2,9 @@
 
 public class EnemyPatrolState : IEnemyState
 {
-    private Vector2 moveDirection = Vector2.right; // Bắt đầu bằng việc đi sang phải
+    private Vector2 moveDirection = Vector2.right; 
     private float patrolTimer;
-    private float timeToTurn = 3f; // Cứ 3 giây thì quay đầu 1 lần
+    private float timeToTurn = 3f; 
 
     public void EnterState(EnemyBase enemy)
     {

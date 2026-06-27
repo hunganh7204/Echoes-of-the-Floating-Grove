@@ -25,7 +25,7 @@ public class GameResultUI : MonoBehaviour
 
     public void SetupPanel(bool isVictory, int currentLevel, int score)
     {
-        titleText.text = isVictory ? "VICTORY!" : "YOU LOSE";
+        titleText.text = isVictory ? "VICTORY!" : "DEFEAT!";
         titleText.color = isVictory
     ? new Color32(46, 125, 50, 255)  
     : new Color32(198, 40, 40, 255);

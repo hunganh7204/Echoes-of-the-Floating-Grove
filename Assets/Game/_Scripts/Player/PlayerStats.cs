@@ -67,7 +67,7 @@ public class PlayerStats : MonoBehaviour, IDamageable
         currentStamina -= amount;
         if (currentStamina < 0) currentStamina = 0;
 
-        lastStaminaUseTime = Time.time; // Cập nhật lại thời gian vừa dùng để tính Delay hồi
+        lastStaminaUseTime = Time.time; 
 
         if (PlayerHUDUI.Instance != null)
             PlayerHUDUI.Instance.UpdateStamina(currentStamina, maxStamina);
@@ -137,7 +137,7 @@ public class PlayerStats : MonoBehaviour, IDamageable
     {
         currentHealth = savedHealth;
         currentMana = savedMana;
-        currentStamina = maxStamina; // Hồi full thể lực khi load Checkpoint
+        currentStamina = maxStamina; 
         UpdateAllUI();
     }
     private void UpdateAllUI()

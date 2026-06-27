@@ -10,7 +10,7 @@ public class EchoClone : MonoBehaviour
     [Header("Clone Combat Settings")]
     [SerializeField] private float attackRange = 0.8f;
     [SerializeField] private LayerMask enemyLayers;
-    [SerializeField] private int attackDamage = 10; // Có thể cho bóng đánh yếu hơn người thật (VD: 5)
+    [SerializeField] private int attackDamage = 10;
 
     [Header("Clone Interact Settings")]
     [SerializeField] private float interactRange = 1.5f;
@@ -32,23 +32,19 @@ public class EchoClone : MonoBehaviour
         {
             EchoFrame frame = framesToPlay[currentFrameIndex];
 
-            // 1. Lặp lại vị trí và hướng xoay (Quay đầu, Đảo trọng lực)
             transform.position = frame.position;
             transform.rotation = frame.rotation;
 
-            // 2. Lặp lại chính xác frame Animation đang chạy
             if (anim != null)
             {
                 anim.Play(frame.animNameHash, 0, frame.animNormalizedTime);
             }
 
-            // 3. Nếu frame này Player có bấm chém -> Bóng cũng vung kiếm gây sát thương
             if (frame.isAttacking)
             {
                 PerformAttack();
             }
 
-            // 4. Nếu frame này Player có bấm tương tác -> Bóng cũng check xung quanh
             if (frame.isInteracting)
             {
                 PerformInteract();
@@ -58,7 +54,7 @@ public class EchoClone : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject); // Chạy hết thì biến mất
+            Destroy(gameObject);
         }
     }
 
@@ -72,7 +68,6 @@ public class EchoClone : MonoBehaviour
             IDamageable damageable = enemy.GetComponent<IDamageable>();
             if (damageable != null)
             {
-                // Hất tung quái vật giống hệt người thật
                 Vector2 knockbackDir = (enemy.transform.position - transform.position).normalized;
                 knockbackDir.y = 0.5f;
                 damageable.TakeDamage(attackDamage, knockbackDir);
@@ -82,7 +77,6 @@ public class EchoClone : MonoBehaviour
 
     private void PerformInteract()
     {
-        // Tạo 1 vòng quét xung quanh bóng để tìm NPC hoặc Cửa, Rương
         Collider2D[] hitObjects = Physics2D.OverlapCircleAll(transform.position, interactRange);
         foreach (Collider2D obj in hitObjects)
         {
@@ -90,12 +84,11 @@ public class EchoClone : MonoBehaviour
             if (interactable != null)
             {
                 interactable.Interact();
-                break; // Chỉ tương tác với 1 vật gần nhất
+                break; 
             }
         }
     }
 
-    // Vẽ vòng đỏ/xanh trên Scene để bạn dễ căn chỉnh tầm đánh của bóng
     private void OnDrawGizmosSelected()
     {
         if (attackPoint != null)

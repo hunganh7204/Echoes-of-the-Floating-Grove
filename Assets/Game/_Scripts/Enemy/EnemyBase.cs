@@ -20,12 +20,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private SpriteRenderer spriteRenderer;
 
     [Header("Rewards")]
-    [SerializeField] private int scoreValue = 10; // Điểm nhận được khi giết quái này
+    [SerializeField] private int scoreValue = 10; 
 
-    // FSM Core (Cầm giữ State hiện tại)
     protected IEnemyState currentState;
 
-    // Khởi tạo sẵn các trạng thái
     public IEnemyState patrolState = new EnemyPatrolState();
     public IEnemyState chaseState = new EnemyChaseState();
     public IEnemyState attackState = new EnemyAttackState();
@@ -83,7 +81,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public virtual void TakeDamage(int damageAmount, Vector2 knockbackDirection = default)
     {
         currentHealth -= damageAmount;
-        Debug.Log($"<color=orange>{gameObject.name} mất {damageAmount} máu!</color>");
 
         if (spriteRenderer != null) StartCoroutine(FlashRedEffect());
 
@@ -125,7 +122,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
             ScoreManager.Instance.AddScore(scoreValue);
         }
 
-        Debug.Log($"<color=red><b>{gameObject.name} đã chết! +{scoreValue} điểm</b></color>");
         gameObject.SetActive(false);
     }
     public float DistanceToPlayer()

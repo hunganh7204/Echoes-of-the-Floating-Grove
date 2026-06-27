@@ -15,6 +15,7 @@ public enum TileType
     NPC2 = 7,
     Dirt = 8,
     NPC3 = 9,
+    UpsideDownGround = 10,
     Empty = 99
 }
 
@@ -39,6 +40,7 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private GameObject npc2Prefab;
     [SerializeField] private GameObject dirtPrefab;
     [SerializeField] private GameObject npc3Prefab;
+    [SerializeField] private GameObject upsideDownGroundPrefab;
 
     [Header("Settings")]
     public float tileSize = 1f;
@@ -103,6 +105,7 @@ public class LevelGenerator : MonoBehaviour
                     case TileType.NPC2: prefabToUse = npc2Prefab; break;
                     case TileType.Dirt: prefabToUse = dirtPrefab; break;
                     case TileType.NPC3: prefabToUse = npc3Prefab; break;
+                    case TileType.UpsideDownGround: prefabToUse = upsideDownGroundPrefab; break;
                 }
 
                 if (prefabToUse != null)
@@ -184,7 +187,7 @@ public class LevelGenerator : MonoBehaviour
             player.transform.position = finalSpawnPos;
             
 
-            Debug.Log($"Hệ thống: Đã load xong Level {levelID} và thả nhân vật tại {finalSpawnPos}");
+            Debug.Log($"Đã load xong Level {levelID} và thả nhân vật tại {finalSpawnPos}");
         }
         else
         {

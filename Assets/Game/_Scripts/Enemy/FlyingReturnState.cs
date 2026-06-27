@@ -16,7 +16,6 @@ public class FlyingReturnState : IEnemyState
             return;
         }
 
-        // Với quái bay, tính khoảng cách cả X và Y
         float distanceToSpawn = Vector2.Distance(enemy.transform.position, enemy.SpawnPoint);
 
         if (distanceToSpawn <= 0.1f)
@@ -25,7 +24,6 @@ public class FlyingReturnState : IEnemyState
             return;
         }
 
-        // Bay thẳng về tọa độ cũ (Cả X và Y)
         Vector2 dir = (enemy.SpawnPoint - (Vector2)enemy.transform.position).normalized;
         enemy.FaceTarget(enemy.transform.position.x + dir.x);
         enemy.RB.linearVelocity = dir * enemy.PatrolSpeed;

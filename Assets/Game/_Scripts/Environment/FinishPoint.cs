@@ -12,7 +12,6 @@ public class FinishPoint : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            Debug.Log("<color=green>Player đã chạm đích! Hoàn thành màn chơi.</color>");
 
             if (UIManager.Instance != null)
             {

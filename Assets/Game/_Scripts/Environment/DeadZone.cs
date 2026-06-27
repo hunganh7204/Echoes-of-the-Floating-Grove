@@ -10,12 +10,10 @@ public class DeadZone : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Nếu là Player rớt xuống
         if (collision.CompareTag("Player"))
         {
             Debug.Log("<color=red>Player đã rơi vào Deadzone!</color>");
 
-            // Ép chết ngay lập tức bằng cách truyền vào một lượng sát thương khổng lồ
             IDamageable damageable = collision.GetComponent<IDamageable>();
             if (damageable != null)
             {
@@ -23,7 +21,6 @@ public class DeadZone : MonoBehaviour
             }
             else
             {
-                // Phòng hờ nếu Player mất script máu, vẫn ép thua
                 collision.gameObject.SetActive(false);
                 if (UIManager.Instance != null) UIManager.Instance.ShowGameResult(false);
             }

@@ -27,7 +27,6 @@ public class DialogueManager : MonoBehaviour
 
     private void LoadApiKey()
     {
-        // Đọc file ApiKey.txt từ thư mục Resources
         TextAsset keyFile = Resources.Load<TextAsset>("ApiKey");
         if (keyFile != null)
         {
@@ -35,7 +34,7 @@ public class DialogueManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Bảo mật: Không tìm thấy file ApiKey.txt trong thư mục Resources!");
+            Debug.LogError("Không tìm thấy file ApiKey.txt trong thư mục Resources!");
         }
     }
 
@@ -45,8 +44,8 @@ public class DialogueManager : MonoBehaviour
         internalChatHistory = "";
         isWaitingForAI = false;
 
-        IsChatting = true;     // Bật cờ Khóa Input
-        Time.timeScale = 0f;   // Đóng băng thế giới vật lý
+        IsChatting = true;
+        Time.timeScale = 0f;
 
         DialogueUI.Instance.ShowDialogueBox(npc.npcName, npc.greetingMessage, npc.GetSprite());
         internalChatHistory += $"NPC: {npc.greetingMessage}\n";
@@ -58,18 +57,16 @@ public class DialogueManager : MonoBehaviour
 
         string lowerText = userText.ToLower();
 
-        // 1. KIỂM TRA KỊCH BẢN CỨNG TRƯỚC (Ưu tiên số 1)
         foreach (var fixedRes in currentNPC.fixedResponses)
         {
             if (lowerText.Contains(fixedRes.keyword.ToLower()))
             {
                 DialogueUI.Instance.DisplayAnswer(fixedRes.answer);
                 internalChatHistory += $"Player: {userText}\nNPC: {fixedRes.answer}\n";
-                return; // Ngắt luôn, KHÔNG GỌI API
+                return; 
             }
         }
 
-        // 2. NẾU KHÔNG CÓ TRONG KỊCH BẢN -> GỌI AI
         internalChatHistory += $"Player: {userText}\n";
         DialogueUI.Instance.ShowLoadingIndicator();
         StartCoroutine(CallLLM_API(userText));
@@ -79,7 +76,6 @@ public class DialogueManager : MonoBehaviour
     {
         isWaitingForAI = true;
 
-        // Bơm Persona và Lore vào System Prompt
         string systemInstruction = $"Bạn là {currentNPC.npcName}. Tính cách: {currentNPC.npcPersona}. " +
                                    $"Cốt truyện thế giới: {currentNPC.npcLore}. " +
                                    $"Quy tắc: Luôn nhập vai, trả lời ngắn gọn bằng tiếng Việt.";
@@ -110,7 +106,7 @@ public class DialogueManager : MonoBehaviour
 
         if (request.result != UnityWebRequest.Result.Success)
         {
-            DialogueUI.Instance.DisplayAnswer("Ta đang mệt, tín hiệu vũ trụ bị đứt đoạn...");
+            DialogueUI.Instance.DisplayAnswer("Hãy quay lại sau nhé, tôi đang mệt");
         }
         else
         {

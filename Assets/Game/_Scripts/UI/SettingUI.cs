@@ -10,11 +10,10 @@ public class SettingUI : MonoBehaviour
     [SerializeField] private Slider sfxVolumeSlider;
 
     [Header("Keybinding UI")]
-    // --- Các nút đã có ---
     [SerializeField] private Button interactBindButton;
     [SerializeField] private TextMeshProUGUI interactBindText;
 
-    [SerializeField] private Button echoBindButton; // Dùng cho RecordEcho
+    [SerializeField] private Button echoBindButton; 
     [SerializeField] private TextMeshProUGUI echoBindText;
 
     [SerializeField] private Button gravityBindButton;
@@ -26,7 +25,6 @@ public class SettingUI : MonoBehaviour
     [SerializeField] private Button moveRightBindButton;
     [SerializeField] private TextMeshProUGUI moveRightBindText;
 
-    // --- Các nút bổ sung thêm ---
     [SerializeField] private Button jumpBindButton;
     [SerializeField] private TextMeshProUGUI jumpBindText;
 
@@ -49,12 +47,10 @@ public class SettingUI : MonoBehaviour
 
     private void Start()
     {
-        // Load cấu hình âm thanh
         masterVolumeSlider.value = PlayerPrefs.HasKey("MasterVol") ? PlayerPrefs.GetFloat("MasterVol") : 1f;
         bgmVolumeSlider.value = PlayerPrefs.HasKey("BGMVol") ? PlayerPrefs.GetFloat("BGMVol") : 1f;
         sfxVolumeSlider.value = PlayerPrefs.HasKey("SFXVol") ? PlayerPrefs.GetFloat("SFXVol") : 1f;
 
-        // Gắn sự kiện âm thanh
         masterVolumeSlider.onValueChanged.AddListener(OnMasterVolumeChanged);
         bgmVolumeSlider.onValueChanged.AddListener(OnBGMVolumeChanged);
         sfxVolumeSlider.onValueChanged.AddListener(OnSFXVolumeChanged);
@@ -62,11 +58,10 @@ public class SettingUI : MonoBehaviour
         closeButton.onClick.AddListener(ApplySettings);
         resetBindingsButton.onClick.AddListener(ResetToDefault);
 
-        // Gắn sự kiện đổi phím (Move trái/phải dùng index 1 và 2)
+
         moveLeftBindButton.onClick.AddListener(() => StartRebinding("Move", moveLeftBindText, 1));
         moveRightBindButton.onClick.AddListener(() => StartRebinding("Move", moveRightBindText, 2));
 
-        // Các phím còn lại dùng index 0 mặc định
         interactBindButton.onClick.AddListener(() => StartRebinding("Interact", interactBindText));
         echoBindButton.onClick.AddListener(() => StartRebinding("RecordEcho", echoBindText));
         gravityBindButton.onClick.AddListener(() => StartRebinding("Gravity", gravityBindText));
@@ -99,13 +94,11 @@ public class SettingUI : MonoBehaviour
 
     public void ApplySettings()
     {
-        // Lưu cấu hình âm thanh
         PlayerPrefs.SetFloat("MasterVol", masterVolumeSlider.value);
         PlayerPrefs.SetFloat("BGMVol", bgmVolumeSlider.value);
         PlayerPrefs.SetFloat("SFXVol", sfxVolumeSlider.value);
         PlayerPrefs.Save();
 
-        // Lưu cấu hình phím
         if (InputManager.Instance != null) InputManager.Instance.SaveBindingsToData();
 
         if (UIManager.Instance != null) UIManager.Instance.CloseSettings();
@@ -130,46 +123,36 @@ public class SettingUI : MonoBehaviour
         }
     }
 
-    // Tham số bindingIndex mặc định là 0 để tương thích với các phím thường
     public void StartRebinding(string actionName, TextMeshProUGUI bindingText, int bindingIndex = 0)
     {
         bindingText.text = "...";
 
-        // Tắt tính năng tương tác của toàn bộ Panel Setting (Chặn click lung tung)
         if (settingsCanvasGroup != null) settingsCanvasGroup.interactable = false;
 
-        // Gọi sang InputManager truyền thêm bindingIndex
         InputManager.Instance.RebindAction(actionName, () =>
         {
-            // Bật lại tương tác
             if (settingsCanvasGroup != null) settingsCanvasGroup.interactable = true;
-
-            // Bắt UI cập nhật lại toàn bộ chữ để hiển thị kết quả Hoán đổi (nếu có)
             RefreshAllBindingTexts();
         }, bindingIndex);
     }
 
     public void ResetToDefault()
     {
-        // 1. Khôi phục Âm thanh về mức tối đa (1f)
+
         masterVolumeSlider.value = 1f;
         bgmVolumeSlider.value = 1f;
         sfxVolumeSlider.value = 1f;
 
-        // Xóa dữ liệu âm thanh đã lưu
         PlayerPrefs.DeleteKey("MasterVol");
         PlayerPrefs.DeleteKey("BGMVol");
         PlayerPrefs.DeleteKey("SFXVol");
 
-        // 2. Khôi phục Phím bấm qua InputManager
         if (InputManager.Instance != null)
         {
             InputManager.Instance.ResetBindingsToDefault();
         }
 
-        // Cập nhật lại toàn bộ chữ cái trên giao diện về phím mặc định
         RefreshAllBindingTexts();
-
         PlayerPrefs.Save();
     }
 }

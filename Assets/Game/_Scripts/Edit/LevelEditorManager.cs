@@ -15,11 +15,10 @@ public class LevelEditorManager : MonoBehaviour
     [SerializeField] private float cameraMoveSpeed = 15f;
     [SerializeField] private float cameraZoomSpeed = 2f;
 
-    // --- BỔ SUNG SETTING ĐỂ TÙY CHỈNH MÀU LƯỚI ---
     [Header("Grid Visuals")]
-    [SerializeField] private Color gridBackgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.4f); // Màu nền hơi tối và trong suốt
-    [SerializeField] private Color gridLineColor = new Color(1f, 1f, 1f, 0.2f);           // Màu vạch chia ô (trắng mờ)
-    [SerializeField] private Color mapBorderColor = Color.green;                          // Màu viền bao quanh Map
+    [SerializeField] private Color gridBackgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.4f); 
+    [SerializeField] private Color gridLineColor = new Color(1f, 1f, 1f, 0.2f);           
+    [SerializeField] private Color mapBorderColor = Color.green;                          
 
     public string levelNameToLoad = "Level_1";
 

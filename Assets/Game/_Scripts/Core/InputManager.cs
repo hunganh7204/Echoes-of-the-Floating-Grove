@@ -45,9 +45,6 @@ using UnityEngine.InputSystem;
             playerControls.Disable();
         }
 
-    // ==========================================
-    // 1. HÀM TRẢ VỀ TÊN PHÍM HIỂN THỊ CHO UI
-    // ==========================================
     public string GetBindingName(string actionName, int bindingIndex = 0)
     {
         InputAction action = playerControls.asset.FindAction(actionName);
@@ -58,9 +55,6 @@ using UnityEngine.InputSystem;
         return "Trống";
     }
 
-    // ==========================================
-    // 2. HÀM KIỂM TRA TRÙNG PHÍM
-    // ==========================================
     private InputAction GetConflictingAction(InputAction currentAction, string newBindingPath)
     {
         foreach (var action in playerControls.asset)
@@ -71,16 +65,13 @@ using UnityEngine.InputSystem;
             {
                 if (action.bindings[i].effectivePath == newBindingPath)
                 {
-                    return action; // Trả về chính xác hành động đang chiếm phím này
+                    return action; 
                 }
             }
         }
         return null;
     }
 
-    // ==========================================
-    // 3. CẬP NHẬT LẠI HÀM ĐỔI PHÍM (REBIND)
-    // ==========================================
     public void RebindAction(string actionName, Action onRebindComplete, int bindingIndex = 0)
     {
         InputAction actionToRebind = playerControls.asset.FindAction(actionName);
@@ -100,8 +91,6 @@ using UnityEngine.InputSystem;
                 InputAction conflictingAction = GetConflictingAction(actionToRebind, newBindingPath);
                 if (conflictingAction != null)
                 {
-                    Debug.Log($"Hệ thống: Trùng phím! Đang hoán đổi phím sang {conflictingAction.name}");
-
                     int conflictIndex = -1;
                     for (int i = 0; i < conflictingAction.bindings.Count; i++)
                     {
@@ -135,14 +124,9 @@ using UnityEngine.InputSystem;
 
     public void ResetBindingsToDefault()
     {
-        // Xóa toàn bộ ghi đè phím của Input System
         playerControls.asset.RemoveAllBindingOverrides();
-
-        // Xóa dữ liệu phím đã lưu trong ổ cứng
         PlayerPrefs.DeleteKey("InputBindings");
         PlayerPrefs.Save();
-
-        Debug.Log("Hệ thống: Đã khôi phục phím bấm về mặc định!");
     }
 
     public void SaveBindingsToData()
@@ -152,7 +136,6 @@ using UnityEngine.InputSystem;
         PlayerPrefs.SetString("InputBindings", overrides);
         PlayerPrefs.Save();
 
-        Debug.Log("Hệ thống: Đã lưu cấu hình phím bấm!");
     }
 
     public void LoadBindings()

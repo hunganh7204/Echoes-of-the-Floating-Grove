@@ -23,8 +23,6 @@ public class DataManager : MonoBehaviour
         saveFilePath = Application.persistentDataPath + "/savegame.json";
     }
 
-    #region PHẦN 1: QUẢN LÝ TIẾN TRÌNH CHƠI (SAVE/LOAD CHECKPOINT)
-    // =========================================================================
     public void SaveGame(int currentLevel, Vector2 checkpointPosition)
     {
         try
@@ -36,11 +34,10 @@ public class DataManager : MonoBehaviour
 
             string jsonText = JsonUtility.ToJson(dataToSave, true);
             File.WriteAllText(saveFilePath, jsonText);
-            Debug.Log($"<color=cyan>Hệ thống: Đã lưu trò chơi thành công tại: {saveFilePath}</color>");
         }
         catch (System.Exception e)
         {
-            Debug.LogError("<color=red>Hệ thống Lỗi: Không thể lưu trò chơi! Chi tiết: " + e.Message + "</color>");
+            Debug.LogError("Lỗi: Không thể lưu trò chơi! Chi tiết: " + e.Message + "");
         }
     }
 
@@ -53,10 +50,7 @@ public class DataManager : MonoBehaviour
         }
         return null;
     }
-    #endregion
 
-    #region PHẦN 2: QUẢN LÝ MÀN CHƠI (ĐỌC / GHI FILE JSON)
-    // =========================================================================
     public void SaveLevel(LevelData levelData, string fileName)
     {
         string folderPath = Application.dataPath + "/Resources/Levels";
@@ -101,16 +95,9 @@ public class DataManager : MonoBehaviour
         }
         return "Level_" + (maxLevel + 1);
     }
-    #endregion
-
-    #region PHẦN 3: XỬ LÝ DỮ LIỆU EDITOR (RUNTIME DATA MANIPULATION)
-    // =========================================================================
-
-    // Lưu trữ dữ liệu map đang được vẽ
     public LevelData CurrentEditingData { get; private set; }
     public int CurrentEditingLevelID { get; private set; } = 0;
 
-    // Tạo một bản đồ trắng tinh
     public void CreateBlankMapData(int width, int height)
     {
         CurrentEditingLevelID = 0;
@@ -118,29 +105,26 @@ public class DataManager : MonoBehaviour
         for (int y = 0; y < height; y++)
         {
             MapRow row = new MapRow();
-            for (int x = 0; x < width; x++) row.columns.Add(new TileData(99)); // 99 = Empty
+            for (int x = 0; x < width; x++) row.columns.Add(new TileData(99)); 
             CurrentEditingData.grid.Add(row);
         }
     }
 
-    // Đổi ID của 1 ô gạch. Trả về TRUE nếu thực sự có sự thay đổi.
     public bool UpdateTileData(int x, int y, int newTileID)
     {
         if (CurrentEditingData == null) return false;
 
-        // Kiểm tra xem x, y có nằm trong giới hạn mảng không
         if (y >= 0 && y < CurrentEditingData.grid.Count && x >= 0 && x < CurrentEditingData.grid[y].columns.Count)
         {
             if (CurrentEditingData.grid[y].columns[x].id != newTileID)
             {
                 CurrentEditingData.grid[y].columns[x].id = newTileID;
-                return true; // Báo hiệu cho Editor biết mảng đã thay đổi
+                return true; 
             }
         }
         return false;
     }
 
-    // Tự động xử lý logic lấy tên và lưu file
     public void SaveCurrentEditedMap()
     {
         if (CurrentEditingData == null) return;
@@ -152,7 +136,6 @@ public class DataManager : MonoBehaviour
         Debug.Log("Hệ thống: ĐÃ LƯU MAP THÀNH CÔNG: " + fileName);
     }
 
-    // Load một file vào bộ nhớ để chuẩn bị vẽ tiếp
     public LevelData LoadMapForEditing(string levelName)
     {
         LevelData data = LoadLevel(levelName);
@@ -160,7 +143,7 @@ public class DataManager : MonoBehaviour
         {
             CurrentEditingData = data;
 
-            // Cập nhật lại ID đang sửa
+ 
             string[] parts = levelName.Split('_');
             if (parts.Length > 1 && int.TryParse(parts[1], out int parsedID))
             {
@@ -169,5 +152,4 @@ public class DataManager : MonoBehaviour
         }
         return data;
     }
-    #endregion
 }

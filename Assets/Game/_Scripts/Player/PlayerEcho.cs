@@ -7,11 +7,9 @@ public struct EchoFrame
     public Vector2 position;
     public Quaternion rotation;
 
-    // Lưu lại trạng thái chuẩn xác của Animator
     public int animNameHash;
     public float animNormalizedTime;
 
-    // Lưu lại hành động
     public bool isAttacking;
     public bool isInteracting;
 }
@@ -24,14 +22,13 @@ public class PlayerEcho : MonoBehaviour
     [SerializeField] private int echoManaCost = 20;
 
     [Header("References")]
-    [SerializeField] private Animator anim; // Kéo Animator của Player vào đây
+    [SerializeField] private Animator anim; 
 
     private List<EchoFrame> recordedData = new List<EchoFrame>();
     private bool isRecording = false;
     private float recordTimer = 0f;
     private GameObject currentClone;
 
-    // Biến tạm để bắt Input (Vì FixedUpdate có thể lỡ mất phím bấm nhanh)
     private bool frameAttackInput = false;
     private bool frameInteractInput = false;
 
@@ -46,7 +43,6 @@ public class PlayerEcho : MonoBehaviour
         if (InputManager.Instance.ReplayEchoPressed && recordedData.Count > 0 && currentClone == null) ReplayEcho();
         if (InputManager.Instance.CancelEchoPressed && currentClone != null) CancelEcho();
 
-        // NẾU ĐANG GHI HÌNH -> BẮT CÁC PHÍM BẤM HÀNH ĐỘNG
         if (isRecording)
         {
             if (InputManager.Instance.AttackPressed) frameAttackInput = true;
@@ -65,20 +61,18 @@ public class PlayerEcho : MonoBehaviour
                 return;
             }
 
-            // Lấy thông tin animation hiện tại (Đang chạy Anim nào, chạy đến frame thứ mấy)
             AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
             recordedData.Add(new EchoFrame
             {
                 position = transform.position,
                 rotation = transform.rotation,
-                animNameHash = stateInfo.shortNameHash,         // Lưu mã Anim
-                animNormalizedTime = stateInfo.normalizedTime,  // Lưu tiến trình Anim
-                isAttacking = frameAttackInput,                 // Lưu hành động chém
-                isInteracting = frameInteractInput              // Lưu hành động tương tác
+                animNameHash = stateInfo.shortNameHash,         
+                animNormalizedTime = stateInfo.normalizedTime,  
+                isAttacking = frameAttackInput,                 
+                isInteracting = frameInteractInput              
             });
 
-            // Reset biến tạm cho frame tiếp theo
             frameAttackInput = false;
             frameInteractInput = false;
         }

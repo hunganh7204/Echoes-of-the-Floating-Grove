@@ -15,7 +15,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject gameplayHUD;
 
     [Header("UI Transition Settings")]
-    [SerializeField] private float fadeDuration = 0.25f; // Thời gian làm mờ (giây)
+    [SerializeField] private float fadeDuration = 0.25f; 
 
     private GameObject currentActivePanel;
     private GameObject previousPanel;
@@ -31,7 +31,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        CloseAllPanelsInstant(); // Đóng tức thì mọi thứ khi vừa bật game
+        CloseAllPanelsInstant(); 
         ShowMainMenu();
     }
 
@@ -66,7 +66,7 @@ public class UIManager : MonoBehaviour
 
     public void StartGameplay()
     {
-        TransitionToPanel(null); // Tắt mọi menu để vào game
+        TransitionToPanel(null); 
         if (gameplayHUD != null) StartCoroutine(FadeCanvasGroup(gameplayHUD, 1f, true));
         Time.timeScale = 1f;
     }
@@ -123,7 +123,6 @@ public class UIManager : MonoBehaviour
     {
         if (currentActivePanel == newPanel) return;
 
-        // Làm mờ và ẩn Panel cũ
         if (currentActivePanel != null)
         {
             StartCoroutine(FadeCanvasGroup(currentActivePanel, 0f, false));
@@ -131,7 +130,6 @@ public class UIManager : MonoBehaviour
 
         currentActivePanel = newPanel;
 
-        // Bật và làm rõ dần Panel mới
         if (currentActivePanel != null)
         {
             StartCoroutine(FadeCanvasGroup(currentActivePanel, 1f, true));
@@ -142,14 +140,13 @@ public class UIManager : MonoBehaviour
     {
         if (panel == null) yield break;
 
-        // Tự động tìm hoặc gắn thêm CanvasGroup vào UI để chỉnh độ trong suốt
         CanvasGroup cg = panel.GetComponent<CanvasGroup>();
         if (cg == null) cg = panel.AddComponent<CanvasGroup>();
 
         if (stateAtEnd)
         {
             panel.SetActive(true);
-            if (cg.alpha > 0.9f) cg.alpha = 0f; // Tránh lỗi chớp hình nháy sáng
+            if (cg.alpha > 0.9f) cg.alpha = 0f; 
         }
 
         float startAlpha = cg.alpha;
@@ -157,7 +154,6 @@ public class UIManager : MonoBehaviour
 
         while (elapsed < fadeDuration)
         {
-            // DÙNG unscaledDeltaTime: Giúp UI vẫn chuyển động mượt dù TimeScale đang bị đóng băng (= 0)
             elapsed += Time.unscaledDeltaTime;
             cg.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsed / fadeDuration);
             yield return null;
@@ -165,12 +161,11 @@ public class UIManager : MonoBehaviour
 
         cg.alpha = targetAlpha;
 
-        if (!stateAtEnd) panel.SetActive(false); // Ẩn hẳn đi để tiết kiệm hiệu năng
+        if (!stateAtEnd) panel.SetActive(false); 
     }
 
     private void CloseAllPanelsInstant()
     {
-        // Dùng riêng lúc khởi động game để mọi thứ ẩn ngay lập tức, tránh hiển thị đè chéo
         mainMenuPanel.SetActive(false);
         gameResultPanel.SetActive(false);
         pauseMenuPanel.SetActive(false);
@@ -179,9 +174,6 @@ public class UIManager : MonoBehaviour
         currentActivePanel = null;
     }
 
-    // ==========================================
-    // LOGIC GAMEPLAY
-    // ==========================================
 
     public void StartNewGameFromMenu()
     {

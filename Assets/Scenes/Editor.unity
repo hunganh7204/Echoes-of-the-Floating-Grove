@@ -742,6 +742,7 @@ MonoBehaviour:
   npc2Prefab: {fileID: 6909484626341191397, guid: 7a06f997b82403341b52b5aa3f8bc08f, type: 3}
   dirtPrefab: {fileID: 5486676942700563680, guid: e84aad4bc06ff5c48afcd5bdde463204, type: 3}
   npc3Prefab: {fileID: 6909484626341191397, guid: bb0e5752b4d3fd74281ae0dc218dad23, type: 3}
+  upsideDownGroundPrefab: {fileID: 8822862482660543381, guid: 7631390a6c200c741a4a49e755522412, type: 3}
   tileSize: 1
   levelParent: {fileID: 0}
   currentLevelData:

@@ -10,22 +10,22 @@ public class DialogueUI : MonoBehaviour
     [Header("UI Elements")]
     public GameObject chatPanel;
     public TextMeshProUGUI npcNameText;
-    public TextMeshProUGUI dialogueText; // Hiển thị nội dung câu nói (Đổi từ chatHistoryText)
+    public TextMeshProUGUI dialogueText; 
     public TMP_InputField playerInputField;
     public Button sendButton;
     public Button closeButton;
 
     [Header("Visual Novel Effect")]
-    public Image npcAvatarImage;      // Kéo UI Image hiển thị NPC vào đây
-    public Image backgroundOverlay;   // Kéo UI Image làm nền tối vào đây
-    [SerializeField] private float avatarMoveOffset = 30f; // Khoảng cách đẩy ảnh lên
-    [SerializeField] private Color normalOverlayColor = new Color(0, 0, 0, 0.4f); // Tối vừa
-    [SerializeField] private Color focusOverlayColor = new Color(0, 0, 0, 0.75f); // Tối đậm
+    public Image npcAvatarImage;      
+    public Image backgroundOverlay;   
+    [SerializeField] private float avatarMoveOffset = 30f;
+    [SerializeField] private Color normalOverlayColor = new Color(0, 0, 0, 0.4f); 
+    [SerializeField] private Color focusOverlayColor = new Color(0, 0, 0, 0.75f); 
 
     private Vector2 originalAvatarPos;
 
     [Header("Typing Effect")]
-    [SerializeField] private float typingSpeed = 0.03f; // Tốc độ gõ chữ (càng nhỏ càng nhanh)
+    [SerializeField] private float typingSpeed = 0.03f; 
     private Coroutine typingCoroutine;
 
     private void Awake()
@@ -39,7 +39,6 @@ public class DialogueUI : MonoBehaviour
         sendButton.onClick.AddListener(OnSubmitButtonPressed);
         closeButton.onClick.AddListener(CloseChat);
 
-        // Nhấn Enter để gửi
         playerInputField.onSubmit.AddListener(delegate { OnSubmitButtonPressed(); });
 
         chatPanel.SetActive(false);
@@ -61,11 +60,9 @@ public class DialogueUI : MonoBehaviour
         {
             npcAvatarImage.sprite = npcSprite;
             npcAvatarImage.gameObject.SetActive(true);
-            // Giữ tỷ lệ gốc của ảnh NPC để không bị méo
             npcAvatarImage.preserveAspect = true;
         }
 
-        // Chạy hiệu ứng gõ chữ cho câu chào
         PlayTypingEffect(greeting);
 
         playerInputField.text = "";
@@ -82,22 +79,20 @@ public class DialogueUI : MonoBehaviour
         SetFocusState(false);
     }
 
-    // Hiển thị câu hỏi của người chơi ngay lập tức (Không cần gõ)
     public void DisplayUserMessage(string msg)
     {
         if (typingCoroutine != null) StopCoroutine(typingCoroutine);
-        dialogueText.text = $"<color=cyan>Bạn:</color> {msg}";
+        dialogueText.text = $"Bạn: {msg}";
         SetFocusState(false);
     }
 
     public void ShowLoadingIndicator()
     {
         if (typingCoroutine != null) StopCoroutine(typingCoroutine);
-        dialogueText.text = $"<color=gray><i>đang suy nghĩ...</i></color>";
+        dialogueText.text = $"Đang suy nghĩ...";
         //SetFocusState(true);
     }
 
-    // Hiển thị câu trả lời của NPC bằng hiệu ứng gõ
     public void DisplayAnswer(string answer)
     {
         PlayTypingEffect(answer);
@@ -116,7 +111,6 @@ public class DialogueUI : MonoBehaviour
         foreach (char c in text.ToCharArray())
         {
             dialogueText.text += c;
-            // Dùng Realtime vì Time.timeScale đang bằng 0
             yield return new WaitForSecondsRealtime(typingSpeed);
         }
         SetFocusState(false);
@@ -126,7 +120,6 @@ public class DialogueUI : MonoBehaviour
     {
         if (npcAvatarImage != null)
         {
-            // Nhô lên nếu isFocused, ngược lại về vị trí gốc
             npcAvatarImage.rectTransform.anchoredPosition = isFocused
                 ? originalAvatarPos + new Vector2(0, avatarMoveOffset)
                 : originalAvatarPos;
@@ -134,7 +127,6 @@ public class DialogueUI : MonoBehaviour
 
         if (backgroundOverlay != null)
         {
-            // Đổi màu nền (Tối đậm / Tối vừa)
             backgroundOverlay.color = isFocused ? focusOverlayColor : normalOverlayColor;
         }
     }
